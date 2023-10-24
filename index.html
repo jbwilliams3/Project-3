@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>World Happiness Report</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 jumbotron text-center">
+          <h1>World Happiness Report Dashboard</h1>
+          <p>Use the interactive charts below to explore the dataset</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="well">
+            <h5>Country Names:</h5>
+            <select id="selDataset" onchange="optionChanged(this.value)"></select>
+          </div>
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Country Info</h3>
+            </div>
+            <div id="sample-metadata" class="panel-body"></div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div id="bar"></div>
+        </div>
+        <div class="col-md-5">
+          <div id="gauge"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="bubble"></div>
+        </div>
+      </div>
+    </div>
+
+    <div> 
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
+
+    <script>Promise.all([
+        fetch('/json_file/happy_2019.json'),
+        fetch('/json_file/happy_2020.json'),
+        fetch('/json_file/happy_2021.json')
+    ])
+    .then(responses => Promise.all(responses.map(response => response.json())))
+    .then(data => {
+        let labels = data[0].map(item => item.label); // Assuming all datasets have the same labels
+        let dataset_2019 = data[0].map(item => item.value);
+        let dataset_2020 = data[1].map(item => item.value);
+        let dataset_2021 = data[2].map(item => item.value);
+        createChart(labels, dataset_2019, dataset_2020, dataset_2021);
+    })
+    .catch(error => console.error('Error loading the JSON data:', error));
+    function createChart(labels, dataset_2019, dataset_2020, dataset_2021) {
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '2019',
+                    data: dataset_2019,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                }, {
+                    label: '2020',
+                    data: dataset_2020,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    fill: false
+                }, {
+                    label: '2021',
+                    data: dataset_2021,
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }</script>
+  
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="./static/app.js"></script>
+    <script src="https://cdn.canvasjs.com/ga/canvasjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  </body>
+  
