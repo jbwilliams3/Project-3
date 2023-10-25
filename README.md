@@ -13,3 +13,5 @@ https://britalvr.github.io/Project_3/
 
 heres the Csvs
 csv/countries.csv csv/country_locations.csv csv/happy_2019.csv csv/happy_2020.csv csv/happy_2021.csv
+Our google slide 
+https://docs.google.com/presentation/d/1Zckf-tL0D5uze0EDlLtj_6iEh4XOgpVNCsjyre-2nfQ/edit#slide=id.p
